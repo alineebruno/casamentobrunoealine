@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aline &amp; Bruno — Nosso Casamento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#E4EFF7;
+    --sage-deep:#2F4B63;
+    --sage:#7FA3BF;
+    --gold:#B08D57;
+    --ink:#22303B;
+    --line: rgba(47,75,99,0.20);
+    box-sizing:border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html{scroll-behavior:smooth; scroll-padding-top: calc(70px + env(safe-area-inset-top, 0px));}
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--cream); color:var(--ink);
+    font-family:'Work Sans', sans-serif; font-weight:400;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{font-family:'Cormorant Garamond', serif; font-weight:500; margin:0; color:var(--sage-deep);}
+
+  nav{
+    position:sticky; top:0; top: env(safe-area-inset-top, 0px);
+    z-index:50; display:flex; justify-content:center; gap:clamp(14px,3vw,32px);
+    padding:16px 12px; background:color-mix(in srgb, var(--cream) 88%, transparent);
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--line);
+    font-size:0.82rem; letter-spacing:.03em; overflow-x:auto;
+  }
+  nav a{color:var(--ink); text-decoration:none; opacity:.75; white-space:nowrap;}
+  nav a:hover, nav a:focus-visible{opacity:1;}
+
+  section{padding:clamp(56px,10vw,110px) 20px; max-width:760px; margin:0 auto;}
+  .hero{
+    min-height:88vh; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; text-align:center; max-width:100%; gap:22px; padding:80px 20px 60px;
+  }
+  .hero .kicker{font-size:.95rem; color:var(--sage); letter-spacing:.08em;}
+  .hero h1{font-size:clamp(2.8rem,9vw,5.2rem); line-height:1.05; font-style:italic;}
+  .hero .date{font-size:1.15rem; color:var(--sage-deep); margin-top:4px;}
+  .hero svg{width:120px; height:auto; opacity:.8; margin-top:8px;}
+
+  .center{text-align:center;}
+  .lede{max-width:520px; margin:0 auto; line-height:1.7; color:var(--ink); opacity:.85;}
+
+  .divider{display:flex; align-items:center; gap:14px; margin:8px auto 40px; max-width:200px;}
+  .divider .l{flex:1; height:1px; background:var(--line);}
+
+  .details-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:36px;}
+  @media (max-width:560px){.details-grid{grid-template-columns:1fr;}}
+  .detail-card{border-top:1px solid var(--line); padding-top:16px;}
+  .detail-card h3{font-size:1.5rem; margin-bottom:6px;}
+  .detail-card p{margin:2px 0; line-height:1.6; opacity:.85; font-size:.95rem;}
+
+  form{display:flex; flex-direction:column; gap:16px; margin-top:32px;}
+  .row{display:flex; gap:14px;}
+  @media (max-width:560px){.row{flex-direction:column;}}
+  label{font-size:.8rem; letter-spacing:.03em; opacity:.75; display:block; margin-bottom:6px;}
+  input[type=text], input[type=number], textarea, select{
+    width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:2px;
+    background:transparent; color:var(--ink); font-family:inherit; font-size:.95rem;
+  }
+  input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible{
+    outline:2px solid var(--gold); outline-offset:2px;
+  }
+  .attend-toggle{display:flex; gap:10px;}
+  .attend-toggle button{
+    flex:1; padding:12px; border:1px solid var(--line); background:transparent;
+    color:var(--ink); font-family:inherit; cursor:pointer; border-radius:2px; font-size:.9rem;
+  }
+  .attend-toggle button[aria-pressed="true"]{background:var(--sage-deep); color:#fff; border-color:var(--sage-deep);}
+
+  .btn{
+    margin-top:6px; padding:14px 20px; background:var(--sage-deep); color:#fff; border:none;
+    border-radius:2px; font-family:inherit; font-size:.95rem; cursor:pointer; letter-spacing:.02em;
+  }
+  .btn:hover{background:var(--gold);}
+  .btn:disabled{opacity:.5; cursor:default;}
+  .btn.ghost{background:transparent; border:1px solid var(--sage-deep); color:var(--sage-deep);}
+
+  .status-msg{font-size:.9rem; padding:12px 14px; border-radius:2px; display:none;}
+  .status-msg.show{display:block;}
+  .status-msg.ok{background:rgba(138,154,128,.18); color:var(--sage-deep);}
+  .status-msg.err{background:rgba(176,60,60,.12); color:#a03c3c;}
+
+  .gift-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:18px; margin-top:36px;}
+  .gift-card{
+    border:1px solid var(--line); padding:20px 18px; display:flex; flex-direction:column;
+    gap:10px; background:color-mix(in srgb, var(--cream) 94%, var(--sage) 6%);
+  }
+  .gift-card h3{font-size:1.25rem;}
+  .gift-price{font-size:.85rem; color:var(--gold); letter-spacing:.02em;}
+  .gift-card p.desc{font-size:.85rem; opacity:.75; line-height:1.5; flex:1; margin:0;}
+  .gift-claimed{font-size:.8rem; color:var(--sage-deep); font-style:italic;}
+  .pay-options{display:flex; flex-direction:column; gap:8px; margin-top:4px;}
+  .pay-options .btn, .pay-options .btn.ghost{margin-top:0; font-size:.85rem; padding:11px 14px;}
+  .pix-box{border:1px solid var(--line); padding:14px; display:none; flex-direction:column; gap:10px; font-size:.85rem;}
+  .pix-box.show{display:flex;}
+  .pix-key-row{display:flex; gap:8px; align-items:center;}
+  .pix-key-row code{flex:1; background:color-mix(in srgb, var(--sage) 12%, transparent); padding:8px 10px; border-radius:2px; word-break:break-all; font-family:inherit;}
+  .copy-btn{border:1px solid var(--line); background:transparent; color:var(--ink); padding:8px 10px; cursor:pointer; border-radius:2px; font-size:.8rem; white-space:nowrap;}
+  .copy-btn:hover{border-color:var(--gold); color:var(--gold);}
+
+  footer{text-align:center; padding:50px 20px 70px; font-size:.8rem; opacity:.55;}
+
+  .overflow-wrap{overflow-x:auto;}
+  ::selection{background:var(--gold); color:#fff;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#inicio">Início</a>
+  <a href="#detalhes">Cerimônia</a>
+  <a href="#rsvp">Confirmar presença</a>
+  <a href="#presentes">Lista de presentes</a>
+</nav>
+
+<section class="hero" id="inicio">
+  <span class="kicker">Vamos nos casar</span>
+  <h1>Aline &amp; Bruno</h1>
+  <p class="date">16 de janeiro de 2027 · Chácara Wanderlust, Mauá, SP</p>
+  <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--sage)" stroke-width="1.2">
+    <path d="M10 30 C 50 5, 80 5, 100 30 C 120 5, 150 5, 190 30" />
+    <circle cx="100" cy="30" r="3" fill="var(--sage)" stroke="none"/>
+  </svg>
+</section>
+
+<section id="detalhes">
+  <h2 class="center" style="font-size:2.4rem;">Detalhes do grande dia</h2>
+  <div class="divider"><span class="l"></span></div>
+  <p class="lede center">Ficaremos felizes em celebrar com vocês. Abaixo estão as informações da cerimônia e da recepção — chegando um pouco antes, aproveitamos ainda mais o dia.</p>
+  <div class="details-grid">
+    <div class="detail-card">
+      <h3>Cerimônia e recepção</h3>
+      <p>16 de janeiro de 2027</p>
+      <p>Chácara Wanderlust</p>
+      <p>Estrada Iguatemi, 750</p>
+      <p>Núcleo Dr. Carlos de Campos, Mauá, SP</p>
+    </div>
+    <div class="detail-card">
+      <h3>Prazo para confirmar</h3>
+      <p>Contamos com sua resposta até</p>
+      <p style="font-size:1.4rem; font-family:'Cormorant Garamond',serif; color:var(--gold);">30 de dezembro de 2026</p>
+    </div>
+  </div>
+</section>
+
+<section id="rsvp">
+  <h2 class="center" style="font-size:2.4rem;">Confirme sua presença</h2>
+  <div class="divider"><span class="l"></span></div>
+  <p class="lede center">Pedimos a gentileza de confirmar até 30 de dezembro de 2026, para organizarmos tudo com carinho.</p>
+  <p class="center" style="margin-top:28px;">
+    <a class="btn" style="text-decoration:none; display:inline-block;" href="https://tally.so/r/WOxDkL" target="_blank" rel="noopener">Confirmar presença</a>
+  </p>
+</section>
+
+<section id="presentes">
+  <h2 class="center" style="font-size:2.4rem;">Lista de presentes</h2>
+  <div class="divider"><span class="l"></span></div>
+  <p class="lede center">Nosso maior presente é ter vocês ao nosso lado celebrando o início dessa nova fase.</p>
+  <p class="lede center" style="margin-top:14px;">Para quem quiser nos presentear, criamos algumas cotas que representam um pouquinho dos sonhos que estamos construindo juntos. Cada contribuição, independente do valor, será recebida com muito carinho e fará parte da nossa história.</p>
+  <p class="lede center" style="margin-top:14px;">Obrigado por celebrarem esse momento tão especial conosco! ❤️</p>
+  <p class="center" style="margin-top:28px;">
+    <a class="btn" style="text-decoration:none; display:inline-block;" href="https://link.mercadopago.com.br/presentecasamentoba" target="_blank" rel="noopener">Prefere cartão? Pague aqui (débito ou crédito)</a>
+  </p>
+  <div class="gift-grid" id="giftGrid"></div>
+</section>
+
+<footer>Feito com carinho para Aline &amp; Bruno · 16.01.2027</footer>
+
+<script>
+(async function(){
+  // Número de WhatsApp dos noivos (formato internacional, sem espaços/símbolos)
+  const WHATSAPP_NUMBER = '5511945259648';
+
+  function openWhatsApp(text){
+    window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text), '_blank');
+  }
+
+  // ---------- Cotas de contribuição em dinheiro ----------
+  // Chave PIX dos noivos — troque pela chave real (CPF, e-mail, telefone ou aleatória).
+  const PIX_KEY = '11945259648';
+
+  const gifts = [
+    {id:'g1', name:'Cota 50', price:'R$ 50', desc:'Salve o Bruno da vergonha alheia: ajude a comprar um chinelo novo antes que alguém veja ele descalço de novo.'},
+    {id:'g2', name:'Cota 100', price:'R$ 100', desc:'Missão: manter o pote de creatina da Aline sempre cheio. Sem ela, o treino é só conversa.'},
+    {id:'g3', name:'Cota 150', price:'R$ 150', desc:'Ajude a resolver a Guerra do Cobertor: um kit de cama novo pra noiva dormir quentinha (e parar de puxar tudo pro lado dela).'},
+    {id:'g4', name:'Cota 200', price:'R$ 200', desc:'Invista numa panela antiaderente de verdade. A meta é zero incêndio no primeiro jantar de casados.'},
+    {id:'g5', name:'Cota 250', price:'R$ 250', desc:'Patrocine um pedacinho da lua de mel. Em troca, você ganha uma menção honrosa no photo dump da viagem.'},
+    {id:'g6', name:'Cota 350', price:'R$ 350', desc:'Ajude a trocar a cama velha por uma de casal de verdade — hora de aposentar o colchão que canta a cada virada.'},
+    {id:'g7', name:'Cota 500', price:'R$ 500', desc:'Cota master: vire patrocinador oficial da nossa lua de mel. Em troca, você leva nossa eterna gratidão e um abraço bem apertado.'},
+  ];
+
+  const grid = document.getElementById('giftGrid');
+
+  function renderGifts(){
+    grid.innerHTML = '';
+    gifts.forEach(g=>{
+      const card = document.createElement('div');
+      card.className = 'gift-card';
+      card.innerHTML = `
+        <h3>${g.name}</h3>
+        <span class="gift-price">${g.price}</span>
+        <p class="desc">${g.desc}</p>
+      `;
+
+      const payWrap = document.createElement('div');
+      payWrap.className = 'pay-options';
+
+      const pixBtn = document.createElement('button');
+      pixBtn.className = 'btn ghost';
+      pixBtn.textContent = 'Contribuir via PIX';
+
+      const pixBox = document.createElement('div');
+      pixBox.className = 'pix-box';
+      pixBox.innerHTML = `
+        <span>Chave PIX (${g.price}):</span>
+        <div class="pix-key-row">
+          <code>${PIX_KEY}</code>
+          <button type="button" class="copy-btn">Copiar</button>
+        </div>
+        <button type="button" class="btn" style="margin-top:2px;">Já enviei o PIX</button>
+      `;
+
+      pixBtn.addEventListener('click', ()=>{
+        pixBox.classList.toggle('show');
+      });
+
+      pixBox.querySelector('.copy-btn').addEventListener('click', async (ev)=>{
+        try{
+          await navigator.clipboard.writeText(PIX_KEY);
+          ev.target.textContent = 'Copiado!';
+          setTimeout(()=>{ ev.target.textContent = 'Copiar'; }, 1800);
+        }catch(e){ /* clipboard indisponível */ }
+      });
+
+      const confirmBtn = pixBox.querySelector('.btn');
+      confirmBtn.addEventListener('click', ()=>{
+        const who = prompt('Seu nome, para os noivos saberem quem contribuiu:');
+        if(!who) return;
+        openWhatsApp(`Oi! Aqui é ${who.trim()} 💚 Acabei de enviar o PIX de ${g.price} (${g.name}) pra vocês!`);
+        pixBox.classList.remove('show');
+        pixBtn.textContent = 'Obrigado! ✓';
+        setTimeout(()=>{ pixBtn.textContent = 'Contribuir via PIX'; }, 2500);
+      });
+
+      payWrap.appendChild(pixBtn);
+      payWrap.appendChild(pixBox);
+
+      card.appendChild(payWrap);
+      grid.appendChild(card);
+    });
+  }
+
+  renderGifts();
+})();
+</script>
+</body>
+</html>
